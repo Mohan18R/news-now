@@ -15,9 +15,9 @@ const App = () => {
 
   const fetchArticles = async (category, searchQuery = "") => {
     try {
-      let url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=8b1befc5963f4ff296d11cd681d46e38`;
+      let url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`;
       if (searchQuery) {
-        url = `https://newsapi.org/v2/everything?q=${searchQuery}&apiKey=8b1befc5963f4ff296d11cd681d46e38`;
+        url = `https://newsapi.org/v2/everything?q=${searchQuery}&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`;
       }
       const response = await axios.get(url);
       setArticles(response.data.articles);

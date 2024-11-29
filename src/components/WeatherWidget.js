@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const WeatherWidget = () => {
-  // Set default location to New Delhi, India
+  // Set default location to Bengaluru
   const [weather, setWeather] = useState(null);
-  const [location, setLocation] = useState("Bengaluru");  // Set default location here
+  const [location, setLocation] = useState("Bengaluru"); // Default location
   const [date, setDate] = useState(new Date());
 
   const fetchWeather = async () => {
-    const apiKey = "3af15bddcc73c41b84ed2d4944abe7b8";  // Replace with your OpenWeather API key
+    const apiKey = process.env.REACT_APP_WEATHER_API_KEY; // Access the API key from .env file
     try {
       const response = await axios.get(
         `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${apiKey}`
