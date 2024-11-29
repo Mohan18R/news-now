@@ -1,38 +1,104 @@
-.App {
-  text-align: center;
+body {
+  background-color: #f8f9fa;
+  font-family: Arial, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+header {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.card {
+  transition: transform 0.2s ease;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.card:hover {
+  transform: scale(1.05);
+}
+
+.carousel img {
+  height: 400px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.carousel img:hover {
+  transform: scale(1.1);
+}
+
+/* Dark Mode Styles */
+.dark-mode {
+  background-color: #121212;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.dark-mode .card {
+  background-color: #1f1f1f;
+  color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.dark-mode .carousel-caption {
+  color: #f8f9fa;
+}
+
+/* Dark Mode Styling */
+.dark-mode .weather-widget {
+  background-color: #343a40;
+  color: white;
+}
+
+.dark-mode .weather-widget .weather-icon {
+  filter: brightness(1.5);
+}
+
+.dark-mode .weather-widget h5 {
+  color: #f8f9fa;
+}
+
+.dark-mode .weather-widget h3 {
+  color: #1e90ff;
+}
+
+.dark-mode .weather-widget p {
+  color: #dcdcdc;
+}
+
+.weather-widget {
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  padding: 20px;
+  width: 500px;
+  margin: 20px auto;
+}
+
+.weather-widget .card-body {
+  font-family: 'Arial', sans-serif;
+}
+
+.weather-widget .weather-icon {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.weather-widget h5 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #343a40;
+}
+
+.weather-widget h3 {
+  font-size: 2rem;
+  color: #007bff;
+}
+
+.weather-widget p {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+/* Light Mode Styling */
+.weather-widget {
+  background-color: #f8f9fa;
+  color: black;
 }

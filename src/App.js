@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Header from "./components/header";
+import WeatherWidget from "./components/WeatherWidget";
+import NewsCarousel from "./components/NewsCarousel";
+import NewsCards from "./components/newsCard";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [articles, setArticles] = useState([]);
+  const [category, setCategory] = useState("general");
+  const [query, setQuery] = useState(""); // For Search
+  const [darkMode, setDarkMode] = useState(false); // For Dark Mode
+
+  const fetchArticles = async (category, searchQuery = "") => {
+    try {
+      let url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=8b1befc5963f4ff296d11cd681d46e38`;
+      if (searchQuery) {
+        url = `https://newsapi.org/v2/everything?q=${searchQuery}&apiKey=8b1befc5963f4ff296d11cd681d46e38`;
+      }
+      const response = await axios.get(url);
+      setArticles(response.data.articles);
+    } catch (error) {
+      console.error("Error fetching articles:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchArticles(category, query);
+  }, [category, query]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={darkMode ? "dark-mode" : ""}>
+      <Header setCategory={setCategory} setQuery={setQuery} toggleDarkMode={toggleDarkMode} />
+      <div className="container mt-4">
+        <WeatherWidget />
+        <NewsCarousel articles={articles.slice(0, 5)} />
+        <h2 className="text-center mt-4">Latest News</h2>
+        <NewsCards articles={articles} />
+      </div>
     </div>
   );
-}
+};
 
 export default App;
