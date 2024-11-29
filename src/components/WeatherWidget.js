@@ -4,14 +4,13 @@ import axios from "axios";
 const WeatherWidget = () => {
   // Set default location to Bengaluru
   const [weather, setWeather] = useState(null);
-  const [location, setLocation] = useState("Bengaluru"); // Default location
   const [date, setDate] = useState(new Date());
 
   const fetchWeather = async () => {
     const apiKey = process.env.REACT_APP_WEATHER_API_KEY; // Access the API key from .env file
     try {
       const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${apiKey}`
+        `https://api.openweathermap.org/data/2.5/weather?q=Bengaluru&units=metric&appid=${apiKey}` // Fixed location Bengaluru
       );
       setWeather(response.data);
     } catch (error) {
@@ -23,7 +22,7 @@ const WeatherWidget = () => {
     fetchWeather();
     const timer = setInterval(() => setDate(new Date()), 1000); // Update time every second
     return () => clearInterval(timer);
-  }, [location]);
+  }, []); // Empty dependency array since location is static
 
   return (
     <div className="weather-widget card text-center shadow-lg">

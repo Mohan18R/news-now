@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 const Header = ({ setCategory, setQuery, toggleDarkMode }) => {
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
