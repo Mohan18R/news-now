@@ -19,15 +19,16 @@ const App = () => {
       if (searchQuery) {
         url = `https://newsapi.org/v2/everything?q=${searchQuery}&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`;
       }
+  
+      console.log(`Fetching from URL: ${url}`); // Debug API URL
       const response = await axios.get(url, {
         headers: {
-          "User-Agent": "Mozilla/5.0", // Add this
-          "Accept": "application/json",
+          "Accept": "application/json", // Remove User-Agent
         },
       });
       setArticles(response.data.articles);
     } catch (error) {
-      console.error("Error fetching articles:", error);
+      console.error("Error fetching articles:", error.response || error);
     }
   };
   
