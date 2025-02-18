@@ -2,49 +2,65 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const WeatherWidget = () => {
-  // Set default location to Bengaluru
   const [weather, setWeather] = useState(null);
   const [date, setDate] = useState(new Date());
 
-  const fetchWeather = async () => {
-    const apiKey = process.env.REACT_APP_WEATHER_API_KEY; // Access the API key from .env file
-    try {
-      const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=Bengaluru&units=metric&appid=${apiKey}` // Fixed location Bengaluru
-      );
-      setWeather(response.data);
-    } catch (error) {
-      console.error("Error fetching weather data", error);
-    }
-  };
-
   useEffect(() => {
-    fetchWeather();
-    const timer = setInterval(() => setDate(new Date()), 1000); // Update time every second
+    const getWeather = async (latitude, longitude) => {
+      try {
+        const response = await axios.get(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.REACT_APP_WEATHER_API_KEY}&units=metric`
+        );
+        setWeather(response.data);
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+      }
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          getWeather(position.coords.latitude, position.coords.longitude);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          // Default to a location if geolocation fails
+          getWeather(51.5074, -0.1278); // London coordinates
+        }
+      );
+    }
+
+    // Update time every minute
+    const timer = setInterval(() => setDate(new Date()), 60000);
     return () => clearInterval(timer);
-  }, []); // Empty dependency array since location is static
+  }, []);
+
+  if (!weather) {
+    return (
+      <div className="weather-widget card text-center shadow-lg">
+        <div className="card-body p-4">
+          <div className="spinner-border text-light" role="status">
+            <span className="visually-hidden">Loading weather data...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="weather-widget card text-center shadow-lg">
-      {weather ? (
-        <div className="card-body">
-          <h5 className="card-title">{weather.name}, {weather.sys.country}</h5>
-          <div className="d-flex justify-content-center">
-            <img
-              src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}
-              alt={weather.weather[0].description}
-              className="weather-icon"
-            />
-            <h3 className="card-text">{weather.main.temp}°C</h3>
+    <div className="weather-widget shadow-lg rounded-4 border-0">
+      <div className="card-body p-4 text-white">
+        <h5 className="fw-bold mb-3">
+          <i className="bi bi-geo-alt me-2"></i>
+          {weather?.name}, {weather?.sys?.country}
+        </h5>
+        <div className="d-flex justify-content-center align-items-center">
+          <div className="display-1 fw-bold mb-0">
+            {Math.round(weather?.main?.temp)}°C
           </div>
-          <p className="card-text">{weather.weather[0].description}</p>
-          <p className="card-text">{date.toLocaleDateString()} | {date.toLocaleTimeString()}</p>
         </div>
-      ) : (
-        <div className="card-body">
-          <p>Loading weather data...</p>
-        </div>
-      )}
+        <p className="text-center mb-0">{weather?.weather[0]?.description}</p>
+      </div>
     </div>
   );
 };

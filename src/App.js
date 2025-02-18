@@ -6,6 +6,7 @@ import NewsCarousel from "./components/NewsCarousel";
 import NewsCards from "./components/newsCard";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import ScrollToTop from './components/ScrollToTop';
 
 const App = () => {
   const [articles, setArticles] = useState([]);
@@ -44,12 +45,13 @@ const App = () => {
   return (
     <div className={darkMode ? "dark-mode" : ""}>
       <Header setCategory={setCategory} setQuery={setQuery} toggleDarkMode={toggleDarkMode} />
-      <div className="container mt-4">
+      <div className="container py-4">
         <WeatherWidget />
         <NewsCarousel articles={articles.slice(0, 5)} />
         <h2 className="text-center mt-4">Latest News</h2>
         <NewsCards articles={articles} />
       </div>
+      <ScrollToTop />
     </div>
   );
 };

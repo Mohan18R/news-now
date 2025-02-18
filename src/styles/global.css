@@ -1,0 +1,46 @@
+/* Header styles */
+header {
+  z-index: 1000;
+  width: 100%;
+}
+
+/* Add padding to body to prevent content from hiding under fixed header */
+body {
+  padding-top: 70px;
+}
+
+/* Transparent header background with backdrop filter */
+header.bg-transparent {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Gradient background for scrolled header */
+.bg-gradient-dark {
+  background: linear-gradient(to right, #1a1a1a, #2c3e50);
+}
+
+/* Form controls in header */
+header .form-control,
+header .form-select {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+}
+
+header .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+header .form-control:focus,
+header .form-select:focus {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  box-shadow: none;
+}
+
+/* Dark mode adjustments */
+.dark-mode header.bg-transparent {
+  background: rgba(0, 0, 0, 0.8);
+} 

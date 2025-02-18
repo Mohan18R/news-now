@@ -1,37 +1,86 @@
+import React, { useState, useEffect } from "react";
+
 const Header = ({ setCategory, setQuery, toggleDarkMode }) => {
-  const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [show, setShow] = useState(true);
+
+  const controlHeader = () => {
+    const currentScrollY = window.scrollY;
+    
+    if (currentScrollY > lastScrollY) { // scrolling down
+      setShow(false);
+    } else { // scrolling up
+      setShow(true);
+    }
+
+    // Update scroll position
+    setLastScrollY(currentScrollY);
+    // Set whether page is scrolled
+    setIsScrolled(currentScrollY > 10);
   };
 
-  const handleSearchChange = (e) => {
-    setQuery(e.target.value);
-  };
+  useEffect(() => {
+    window.addEventListener('scroll', controlHeader);
+    return () => {
+      window.removeEventListener('scroll', controlHeader);
+    };
+  }, [lastScrollY]);
+
+  const categories = [
+    "general",
+    "business",
+    "entertainment",
+    "health",
+    "science",
+    "sports",
+    "technology",
+  ];
 
   return (
-    <header className="bg-dark text-white p-3 d-flex justify-content-between align-items-center">
-      <h1 className="mb-0">NewsNow</h1>
-      <div className="d-flex gap-3">
-        <select className="form-select w-auto" onChange={handleCategoryChange}>
-          <option value="general">General</option>
-          <option value="business">Business</option>
-          <option value="technology">Technology</option>
-          <option value="entertainment">Entertainment</option>
-          <option value="sports">Sports</option>
-          <option value="health">Health</option>
-        </select>
+    <header 
+      className={`fixed-top ${isScrolled ? 'bg-gradient-dark shadow-lg' : 'bg-transparent'}`}
+      style={{
+        transform: show ? 'translateY(0)' : 'translateY(-100%)',
+        transition: 'transform 0.3s ease-in-out, background-color 0.3s ease',
+        padding: isScrolled ? '0.5rem 0' : '1rem 0'
+      }}
+    >
+      <div className="container d-flex justify-content-between align-items-center">
+        <h1 className="mb-0 fw-bold d-flex align-items-center">
+          <span className="text-primary">News</span>
+          <span className="text-white">Now</span>
+        </h1>
+        
+        <div className="d-flex gap-3 align-items-center">
+          <select 
+            className="form-select w-auto border-0 rounded-pill px-3"
+            onChange={(e) => setCategory(e.target.value)}
+            defaultValue="general"
+          >
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category.charAt(0).toUpperCase() + category.slice(1)}
+              </option>
+            ))}
+          </select>
 
-        {/* Search Bar */}
-        <input
-          type="text"
-          className="form-control w-auto"
-          placeholder="Search Articles"
-          onChange={handleSearchChange}
-        />
+          <div className="position-relative">
+            <input
+              type="text"
+              className="form-control rounded-pill px-3"
+              placeholder="Search Articles..."
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
 
-        {/* Dark/Light Mode Toggle (Emojis) */}
-        <button className="btn btn-outline-light" onClick={toggleDarkMode}>
-          {document.body.classList.contains("dark-mode") ? "🌞" : "🌙"}
-        </button>
+          <button 
+            className="btn btn-outline-light rounded-circle"
+            onClick={toggleDarkMode}
+          >
+            <i className="bi bi-moon-stars-fill"></i>
+          </button>
+        </div>
       </div>
     </header>
   );
