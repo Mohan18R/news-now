@@ -7,6 +7,7 @@ header {
 /* Add padding to body to prevent content from hiding under fixed header */
 body {
   padding-top: 70px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Transparent header background with backdrop filter */
@@ -43,4 +44,41 @@ header .form-select:focus {
 /* Dark mode adjustments */
 .dark-mode header.bg-transparent {
   background: rgba(0, 0, 0, 0.8);
+}
+
+/* Theme toggle button styles */
+.theme-toggle-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  cursor: pointer;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(15deg);
+}
+
+.theme-toggle-btn svg {
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.dark-mode .theme-toggle-btn svg {
+  color: #ffd700;
+}
+
+.theme-toggle-btn:not(.dark-mode) svg {
+  color: #f4f4f4;
+}
+
+/* Smooth theme transition */
+.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
 } 

@@ -3,7 +3,7 @@ import axios from "axios";
 
 const WeatherWidget = () => {
   const [weather, setWeather] = useState(null);
-  const [date, setDate] = useState(new Date());
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     const getWeather = async (latitude, longitude) => {
@@ -24,14 +24,13 @@ const WeatherWidget = () => {
         },
         (error) => {
           console.error("Error getting location:", error);
-          // Default to a location if geolocation fails
-          getWeather(51.5074, -0.1278); // London coordinates
+          getWeather(51.5074, -0.1278); // Default to London
         }
       );
     }
 
     // Update time every minute
-    const timer = setInterval(() => setDate(new Date()), 60000);
+    const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
 
@@ -59,7 +58,13 @@ const WeatherWidget = () => {
             {Math.round(weather?.main?.temp)}°C
           </div>
         </div>
-        <p className="text-center mb-0">{weather?.weather[0]?.description}</p>
+        <p className="text-center mb-3">{weather?.weather[0]?.description}</p>
+        <div className="text-center">
+          <small>
+            <i className="bi bi-clock me-2"></i>
+            {currentTime.toLocaleTimeString()}
+          </small>
+        </div>
       </div>
     </div>
   );

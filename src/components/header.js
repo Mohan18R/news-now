@@ -1,31 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { RiSunLine, RiMoonClearLine } from 'react-icons/ri';
+import { BiSearchAlt2 } from 'react-icons/bi';
+import './header.css';
 
 const Header = ({ setCategory, setQuery, toggleDarkMode }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [show, setShow] = useState(true);
+  const [isDark, setIsDark] = useState(document.body.classList.contains('dark-mode'));
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const controlHeader = () => {
+  const controlHeader = useCallback(() => {
     const currentScrollY = window.scrollY;
-    
-    if (currentScrollY > lastScrollY) { // scrolling down
+    if (currentScrollY > lastScrollY) {
       setShow(false);
-    } else { // scrolling up
+    } else {
       setShow(true);
     }
-
-    // Update scroll position
     setLastScrollY(currentScrollY);
-    // Set whether page is scrolled
     setIsScrolled(currentScrollY > 10);
-  };
+  }, [lastScrollY]);
 
   useEffect(() => {
     window.addEventListener('scroll', controlHeader);
     return () => {
       window.removeEventListener('scroll', controlHeader);
     };
-  }, [lastScrollY]);
+  }, [controlHeader]);
+
+  const handleThemeToggle = () => {
+    setIsDark(!isDark);
+    toggleDarkMode();
+  };
 
   const categories = [
     "general",
@@ -38,48 +44,56 @@ const Header = ({ setCategory, setQuery, toggleDarkMode }) => {
   ];
 
   return (
-    <header 
-      className={`fixed-top ${isScrolled ? 'bg-gradient-dark shadow-lg' : 'bg-transparent'}`}
-      style={{
-        transform: show ? 'translateY(0)' : 'translateY(-100%)',
-        transition: 'transform 0.3s ease-in-out, background-color 0.3s ease',
-        padding: isScrolled ? '0.5rem 0' : '1rem 0'
-      }}
-    >
-      <div className="container d-flex justify-content-between align-items-center">
-        <h1 className="mb-0 fw-bold d-flex align-items-center">
-          <span className="text-primary">News</span>
-          <span className="text-white">Now</span>
-        </h1>
+    <header className={`app-header ${isScrolled ? 'scrolled' : ''}`}>
+      <div className="header-container">
+        <div className="logo-section">
+          <h1 className="logo">
+            <span className="text-gradient">News</span>
+            <span className="text-white">Now</span>
+          </h1>
+        </div>
         
-        <div className="d-flex gap-3 align-items-center">
-          <select 
-            className="form-select w-auto border-0 rounded-pill px-3"
-            onChange={(e) => setCategory(e.target.value)}
-            defaultValue="general"
-          >
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </option>
-            ))}
-          </select>
-
-          <div className="position-relative">
+        <div className={`search-section ${isSearchOpen ? 'open' : ''}`}>
+          <div className="search-box">
+            <BiSearchAlt2 
+              className="search-icon" 
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+            />
             <input
               type="text"
-              className="form-control rounded-pill px-3"
-              placeholder="Search Articles..."
+              placeholder="Search news..."
               onChange={(e) => setQuery(e.target.value)}
+              className="search-input"
             />
           </div>
+        </div>
 
-          <button 
-            className="btn btn-outline-light rounded-circle"
-            onClick={toggleDarkMode}
-          >
-            <i className="bi bi-moon-stars-fill"></i>
-          </button>
+        <div className="nav-section">
+          <div className="controls-group">
+            <select 
+              className="category-select"
+              onChange={(e) => setCategory(e.target.value)}
+              defaultValue="general"
+            >
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </option>
+              ))}
+            </select>
+            
+            <button 
+              className="theme-toggle"
+              onClick={handleThemeToggle}
+              aria-label="Toggle theme"
+            >
+              {isDark ? (
+                <RiSunLine className="theme-icon" />
+              ) : (
+                <RiMoonClearLine className="theme-icon" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </header>

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { IoIosArrowUp } from 'react-icons/io';
+import './ScrollToTop.css';
 
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -11,13 +13,6 @@ const ScrollToTop = () => {
     }
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  };
-
   useEffect(() => {
     window.addEventListener("scroll", toggleVisibility);
     return () => {
@@ -25,14 +20,25 @@ const ScrollToTop = () => {
     };
   }, []);
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
+
   return (
-    <button 
-      className={`scroll-to-top ${isVisible ? 'visible' : ''}`}
-      onClick={scrollToTop}
-      aria-label="Scroll to top"
-    >
-      <i className="bi bi-arrow-up-short fs-4"></i>
-    </button>
+    <>
+      {isVisible && (
+        <button 
+          className={`scroll-to-top ${isVisible ? 'visible' : ''}`}
+          onClick={scrollToTop}
+          aria-label="Scroll to top"
+        >
+          <IoIosArrowUp size={24} />
+        </button>
+      )}
+    </>
   );
 };
 
