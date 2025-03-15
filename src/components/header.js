@@ -49,7 +49,7 @@ const Header = ({ setCategory, setQuery, toggleDarkMode }) => {
         <div className="logo-section">
           <h1 className="logo">
             <span className="text-gradient">News</span>
-            <span className="text-white">Now</span>
+            <span className="text-secondary-brand">Now</span>
           </h1>
         </div>
         
